@@ -65,7 +65,7 @@ public interface Factory {
     return createMultiple(() -> createGroupChat(user), amount);
   }
 
-  private static <T> List<T> createMultiple(Supplier<T> supplier, int amount) {
+  static <T> List<T> createMultiple(Supplier<T> supplier, int amount) {
     List<T> items = new ArrayList<>();
     for (int i = 0; i < amount; i++) {
       items.add(supplier.get());

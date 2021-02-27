@@ -8,8 +8,12 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -48,6 +52,28 @@ class ChatTest {
     List<Chat> chats = Chat.findByUser(user);
 
     assertEquals(15, chats.size());
+  }
+
+  @Test
+  void get_sorted_messages() {
+    User user = transaction.run(Factory::createUser);
+    Chat chat = transaction.run(() -> Factory.createPrivateChat(user));
+
+    List<LocalDateTime> dates = new ArrayList<>();
+    LocalDateTime start = LocalDateTime.now();
+    for (int i = 0; i < 100; i++) {
+      dates.add(start.minusDays(1));
+    }
+
+    ArrayList<LocalDateTime> shuffledDates = new ArrayList<>(dates);
+    Collections.shuffle(shuffledDates);
+
+    transaction.run(() ->
+      shuffledDates.forEach(dateTime -> chat.sendMessage(user, "hello world", dateTime))
+    );
+
+    List<Message> messages = chat.findMessages().list();
+    assertEquals(dates, messages.stream().map(Message::getSentAt).collect(Collectors.toList()));
   }
 
 

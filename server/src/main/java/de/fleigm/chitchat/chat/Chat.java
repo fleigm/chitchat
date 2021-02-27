@@ -4,6 +4,8 @@ import de.fleigm.chitchat.ApplicationException;
 import de.fleigm.chitchat.EntityNotFoundException;
 import de.fleigm.chitchat.users.User;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.panache.common.Sort;
 import lombok.Getter;
 
 import javax.persistence.DiscriminatorColumn;
@@ -38,17 +40,29 @@ public abstract class Chat extends PanacheEntityBase {
   }
 
   public Message sendMessage(User user, String text) {
+    return sendMessage(user, text, LocalDateTime.now());
+  }
+
+  public Message sendMessage(User user, String text, LocalDateTime sentAt) {
     if (!canSendMessage(user)){
       throw new ApplicationException("User is not allowed to send message to this chat", 403);
     }
 
-    Message message = new Message(text, LocalDateTime.now(), user, this);
+    Message message = new Message(text, sentAt, user, this);
     this.lastMessage = message;
     message.persist();
     return message;
   }
 
   public abstract boolean canSendMessage(User user);
+
+  public PanacheQuery<Message> findMessages() {
+    return findMessages(id);
+  }
+
+  public static PanacheQuery<Message> findMessages(UUID chatId) {
+    return Message.find("chat.id", Sort.descending("sentAt"), chatId);
+  }
 
   public static Chat findByIdOrFail(Object id) {
     Chat chat = findById(id);
