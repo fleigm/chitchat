@@ -11,20 +11,17 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class ErrorMapper implements ExceptionMapper<Exception> {
+public class ErrorMapper implements ExceptionMapper<WebApplicationException> {
   private static final Logger LOGGER = Logger.getLogger(ErrorMapper.class);
 
   @Inject
   ObjectMapper objectMapper;
 
   @Override
-  public Response toResponse(Exception exception) {
+  public Response toResponse(WebApplicationException exception) {
     LOGGER.error(exception);
 
-    int code = 500;
-    if (exception instanceof WebApplicationException) {
-      code = ((WebApplicationException) exception).getResponse().getStatus();
-    }
+    int code = exception.getResponse().getStatus();
 
     ObjectNode exceptionJson = objectMapper.createObjectNode();
     exceptionJson.put("exceptionType", exception.getClass().getName());

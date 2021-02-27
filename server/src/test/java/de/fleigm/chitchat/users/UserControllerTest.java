@@ -31,8 +31,8 @@ public class UserControllerTest {
     response.then().statusCode(200);
     User user = response.as(User.class);
 
-    assertEquals(id, user.id);
-    assertEquals("new user", user.username);
-    assertNotNull(User.findById(user.id));
+    assertEquals(id, user.getId());
+    assertEquals("new user", user.getUsername());
+    assertNotNull(User.findById(user.getId()));
   }
 }
