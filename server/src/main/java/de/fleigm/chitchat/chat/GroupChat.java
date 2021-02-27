@@ -52,6 +52,10 @@ public class GroupChat extends Chat {
     }
   }
 
+  public void remove(User user) {
+    members.removeIf(members -> members.is(user));
+  }
+
   public static PanacheQuery<GroupChat> findByMember(UUID id) {
     return find("#GroupChat.byMember", id);
   }
