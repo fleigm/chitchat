@@ -1,4 +1,4 @@
-package de.fleigm.realtalk;
+package de.fleigm.chitchat;
 
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import org.testcontainers.containers.BindMode;

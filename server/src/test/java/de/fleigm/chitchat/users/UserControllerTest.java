@@ -1,7 +1,7 @@
-package de.fleigm.realtalk.users;
+package de.fleigm.chitchat.users;
 
-import de.fleigm.realtalk.Helper;
-import de.fleigm.realtalk.MockAuthorizationServer;
+import de.fleigm.chitchat.Helper;
+import de.fleigm.chitchat.MockAuthorizationServer;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;

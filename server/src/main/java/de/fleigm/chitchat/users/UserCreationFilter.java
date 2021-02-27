@@ -1,4 +1,4 @@
-package de.fleigm.realtalk.users;
+package de.fleigm.chitchat.users;
 
 import io.quarkus.security.identity.SecurityIdentity;
 import org.eclipse.microprofile.jwt.JsonWebToken;

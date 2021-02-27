@@ -1,4 +1,4 @@
-package de.fleigm.realtalk.users;
+package de.fleigm.chitchat.users;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

@@ -1,4 +1,4 @@
-package de.fleigm.realtalk;
+package de.fleigm.chitchat;
 
 public class ApplicationException extends RuntimeException {
   private int code;

@@ -1,4 +1,4 @@
-package de.fleigm.realtalk;
+package de.fleigm.chitchat;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.nimbusds.jose.JOSEException;

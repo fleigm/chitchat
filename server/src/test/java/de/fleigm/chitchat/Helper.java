@@ -1,4 +1,4 @@
-package de.fleigm.realtalk;
+package de.fleigm.chitchat;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JOSEObjectType;

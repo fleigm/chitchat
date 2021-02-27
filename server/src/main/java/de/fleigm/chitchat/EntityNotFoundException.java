@@ -1,4 +1,4 @@
-package de.fleigm.realtalk;
+package de.fleigm.chitchat;
 
 public final class EntityNotFoundException extends RuntimeException {
   private final Object id;
