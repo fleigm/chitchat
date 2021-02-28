@@ -35,6 +35,6 @@ public class PrivateChat extends Chat {
   }
 
   public static PrivateChat findByParticipants(UUID a, UUID b) {
-    return PrivateChat.find("participantA.id in ?1 or participantB.id in ?1", List.of(a, b)).firstResult();
+    return PrivateChat.find("participantA.id in ?1 and participantB.id in ?1", List.of(a, b)).firstResult();
   }
 }

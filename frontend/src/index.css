@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html, body, #app {
+    @apply h-full;
+}
+
+#app {
+    @apply text-primary font-sans;
+}
+
+.heading {
+    @apply text-xl font-light py-2;
+}
