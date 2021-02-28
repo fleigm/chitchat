@@ -2,7 +2,9 @@ package de.fleigm.chitchat.users;
 
 import io.quarkus.security.identity.SecurityIdentity;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.jboss.logging.Logger;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -13,6 +15,7 @@ import java.util.UUID;
 
 @Provider
 public class UserCreationFilter implements ContainerRequestFilter {
+  private static final Logger LOGGER = Logger.getLogger(UserCreationFilter.class);
 
   @Inject
   SecurityIdentity identity;
@@ -20,7 +23,9 @@ public class UserCreationFilter implements ContainerRequestFilter {
   @Inject
   JsonWebToken token;
 
-  @Transactional
+  @Inject
+  EnsureUserExists ensureUserExists;
+
   @Override
   public void filter(ContainerRequestContext requestContext) throws IOException {
     if (identity.isAnonymous()) {
@@ -30,9 +35,24 @@ public class UserCreationFilter implements ContainerRequestFilter {
     UUID id = UUID.fromString(token.getSubject());
     String username = identity.getPrincipal().getName();
 
-    if (User.findByIdOptional(id).isEmpty()) {
-      User user = new User(id, username);
-      user.persist();
+    // this is to handle the race condition
+    // if a new user sends multiple requests at once we might
+    // try to insert the user multiple times.
+    try {
+      ensureUserExists.run(id, username);
+    } catch (Exception e) {
+    }
+  }
+
+  @ApplicationScoped
+  protected static class EnsureUserExists {
+
+    @Transactional
+    public void run(UUID id, String username) {
+      if (User.findByIdOptional(id).isEmpty()) {
+        User user = new User(id, username);
+        user.persist();
+      }
     }
   }
 }
