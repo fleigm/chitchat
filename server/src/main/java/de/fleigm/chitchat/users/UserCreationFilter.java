@@ -41,6 +41,7 @@ public class UserCreationFilter implements ContainerRequestFilter {
     try {
       ensureUserExists.run(id, username);
     } catch (Exception e) {
+      LOGGER.warn("race condition");
     }
   }
 

@@ -53,6 +53,12 @@ public class ChatController {
   private Chat createPrivateChat(CreateChatRequest.Private request) {
     User user = User.findByIdOrFail(request.getUser());
 
+    PrivateChat existingChat = PrivateChat.findByParticipants(user.getId(), auth.currentUser().getId());
+
+    if (existingChat != null) {
+      return existingChat;
+    }
+
     return new PrivateChat(auth.currentUser(), user);
   }
 

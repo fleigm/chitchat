@@ -53,6 +53,35 @@ class ChatControllerTest {
   }
 
   @Test
+  void cannot_create_multiple_private_chats_with_same_user() {
+    User john = Helper.createUser("john");
+    User alice = Helper.createUser("alice");
+
+    given()
+        .contentType(ContentType.JSON)
+        .auth().oauth2(Helper.generateJWT(john))
+        .body(new CreateChatRequest.Private(alice.getId()))
+        .when()
+        .post("chats")
+        .then()
+        .statusCode(200);
+
+    given()
+        .contentType(ContentType.JSON)
+        .auth().oauth2(Helper.generateJWT(john))
+        .body(new CreateChatRequest.Private(alice.getId()))
+        .when()
+        .post("chats")
+        .then()
+        .statusCode(200);
+
+    assertEquals(1,
+        PrivateChat.find("participantA.id in ?1 or participantB.id in ?1",
+            List.of(alice.getId(), john.getId())).count());
+
+  }
+
+  @Test
   void create_private_chat_fails_if_other_user_does_not_exists() {
     User john = Helper.createUser("john");
     UUID unknownUserId = UUID.randomUUID();
