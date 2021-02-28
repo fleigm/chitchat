@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>chitchat-parent</artifactId>
-        <groupId>de.fleigm</groupId>
+        <groupId>de.fleigm.chitchat</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>chitchat</artifactId>
+    <artifactId>server</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
