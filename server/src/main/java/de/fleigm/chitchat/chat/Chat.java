@@ -54,6 +54,10 @@ public abstract class Chat extends PanacheEntityBase {
     return message;
   }
 
+  public boolean canSendMessage(UUID id) {
+    return canSendMessage(new User(id, ""));
+  }
+
   public abstract boolean canSendMessage(User user);
 
   public PanacheQuery<Message> findMessages() {
