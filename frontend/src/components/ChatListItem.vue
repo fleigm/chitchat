@@ -1,10 +1,13 @@
 <template>
-  <Avatar :label="icon" shape="circle" class=""></Avatar>
-  <div class="">{{ name }}</div>
+  <div class="cursor-pointer flex gap-4 items-center" @click="openChat">
+    <Avatar :label="icon" shape="circle" class="text-primary-inverse"></Avatar>
+    <div class="">{{ name }}</div>
+  </div>
 </template>
 
 <script>
 import UserService from "@/api/UserService";
+import {Events} from "@/Events";
 
 export default {
   name: "ChatListItem",
@@ -33,15 +36,16 @@ export default {
     },
 
     user() {
-      console.log(UserService.me.value.id);
-      console.log(this.chat.participantA.id);
-      console.log(this.chat.participantB.id);
-      console.log('----');
-
       if (UserService.me.value.id === this.chat.participantA.id) {
         return this.chat.participantB;
       }
       return this.chat.participantA;
+    }
+  },
+
+  methods: {
+    openChat() {
+      this.$eventService.emit(Events.OPEN_CHAT, this.chat);
     }
   }
 }

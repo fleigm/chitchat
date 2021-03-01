@@ -7,9 +7,21 @@ html, body, #app {
 }
 
 #app {
-    @apply text-primary font-sans;
+    @apply text-primary font-sans text-sm;
 }
 
 .heading {
     @apply text-xl font-light py-2;
+}
+
+.chat-window {
+    @apply flex flex-col h-full;
+}
+
+.chat-window .p-card-body {
+    @apply flex-1 flex flex-col overflow-hidden;
+}
+
+.chat-window .p-card-content {
+    @apply flex-1 overflow-auto;
 }
