@@ -56,7 +56,7 @@ public class Page<T> {
 
   public static <T> Page<T> create(PanacheQuery<T> query, Pagination pagination, UriInfo uriInfo) {
     return Page.<T>builder()
-        .entries(query.list())
+        .entries(query.page(pagination.getPage(), pagination.getPageSize()).list())
         .currentPage(pagination.getPage())
         .pageSize(pagination.getPageSize())
         .total(query.count())
