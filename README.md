@@ -39,3 +39,7 @@ run `mvn clean package` in the project root to build the frontend and backend fo
 run `docker-compose build` and `docker-compose up` to build and start the frontend and backend servers.
 Again, make sure you start keycloak before.
 
+ - Frontend: http://localhost:8083
+ - Backend: http://localhost:8080
+ - Keycloak: http://localhost8180
+
