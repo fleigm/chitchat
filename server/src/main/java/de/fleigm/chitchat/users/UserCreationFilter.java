@@ -4,6 +4,7 @@ import io.quarkus.security.identity.SecurityIdentity;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.logging.Logger;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -27,7 +28,9 @@ public class UserCreationFilter implements ContainerRequestFilter {
   @Inject
   JsonWebToken token;
 
-  @Transactional
+  @Inject
+  EnsureUserExists ensureUserExists;
+
   @Override
   public void filter(ContainerRequestContext requestContext) throws IOException {
     if (identity.isAnonymous()) {
@@ -41,12 +44,25 @@ public class UserCreationFilter implements ContainerRequestFilter {
     // if a new user sends multiple requests at once we might
     // try to insert the user multiple times resulting in a duplicate primary key exception.
     try {
+      ensureUserExists.run(id, username);
+    } catch (Exception e) {
+      LOGGER.warn("race condition");
+    }
+  }
+
+  /**
+   * Do not inline!!
+   * otherwise we cannot catch the duplicate primary key exception
+   */
+  @ApplicationScoped
+  protected static class EnsureUserExists {
+
+    @Transactional
+    public void run(UUID id, String username) {
       if (User.findByIdOptional(id).isEmpty()) {
         User user = new User(id, username);
         user.persist();
       }
-    } catch (Exception e) {
-      LOGGER.warn("race condition");
     }
   }
 }
