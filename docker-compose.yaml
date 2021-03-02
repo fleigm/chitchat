@@ -1,0 +1,20 @@
+version: '3.5'
+services:
+  server:
+    container_name: chitchat-server
+    build:
+      context: server
+      dockerfile: src/main/docker/Dockerfile.jvm
+    ports:
+      - 8080:8080
+    network_mode: "host"
+
+  frontend:
+    container_name: chitchat-frontend
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    ports:
+      - 8083:80
+
+
