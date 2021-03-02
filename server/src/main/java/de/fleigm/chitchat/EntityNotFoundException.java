@@ -8,6 +8,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+/**
+ * Throw an {@link EntityNotFoundException} if an entity could not be found or is not visible to a requesting user.
+ * The exception will be mapped to a 404 HTTP response.
+ */
 public final class EntityNotFoundException extends RuntimeException {
   private final Object id;
   private final Class<?> entityClass;
@@ -39,6 +43,9 @@ public final class EntityNotFoundException extends RuntimeException {
            '}';
   }
 
+  /**
+   * Return the exception as a 404 HTTP response
+   */
   @Provider
   public static final class JaxRSErrorMapper implements ExceptionMapper<EntityNotFoundException> {
     @Inject

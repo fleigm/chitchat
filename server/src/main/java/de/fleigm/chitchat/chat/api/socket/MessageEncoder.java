@@ -4,14 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.enterprise.inject.spi.CDI;
-import javax.inject.Inject;
 import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
 public class MessageEncoder implements Encoder.Text<WebSocketMessage> {
 
-  @Inject
+  // Not a CDI managed bean so we cannot use @Inject
   ObjectMapper objectMapper = CDI.current().select(ObjectMapper.class).get();
 
   @Override

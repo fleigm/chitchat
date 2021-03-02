@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Authentication token to establish a web socket connection.
+ */
 public class Token {
   public final UUID id;
 

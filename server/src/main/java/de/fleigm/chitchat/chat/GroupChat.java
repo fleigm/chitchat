@@ -56,6 +56,12 @@ public class GroupChat extends Chat {
     members.removeIf(members -> members.is(user));
   }
 
+  /**
+   * Query group chats where a given user is a member.
+   *
+   * @param id user id
+   * @return group chats of user
+   */
   public static PanacheQuery<GroupChat> findByMember(UUID id) {
     return find("#GroupChat.byMember", id);
   }

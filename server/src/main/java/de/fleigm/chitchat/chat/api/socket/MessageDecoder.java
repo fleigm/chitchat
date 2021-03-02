@@ -10,6 +10,7 @@ import javax.websocket.EndpointConfig;
 
 public class MessageDecoder implements Decoder.Text<WebSocketMessage> {
 
+  // Not a CDI managed bean so we cannot use @Inject
   ObjectMapper objectMapper = CDI.current().select(ObjectMapper.class).get();
 
   @Override

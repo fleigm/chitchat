@@ -8,6 +8,10 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 import java.util.UUID;
 
+/**
+ * Only used for {@link de.fleigm.chitchat.chat.api.socket.ChatEndpoint} because
+ * transactions are not allowed at web socket endpoints.
+ */
 @ApplicationScoped
 public class ChatService {
 

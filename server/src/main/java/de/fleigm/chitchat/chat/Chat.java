@@ -23,6 +23,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Base entity class for {@link PrivateChat} und {@link GroupChat}
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "chat_type", discriminatorType = DiscriminatorType.STRING)
@@ -39,12 +42,25 @@ public abstract class Chat extends PanacheEntityBase {
     return Optional.ofNullable(lastMessage);
   }
 
+  /**
+   * @see Chat#sendMessage(User, String, LocalDateTime)
+   */
   public Message sendMessage(User user, String text) {
     return sendMessage(user, text, LocalDateTime.now());
   }
 
+  /**
+   * Create and persist a new {@link Message} if the user is allowed to
+   * send a message to this chat.
+   * If the user is not allowed a {@link ApplicationException} with the status code 403 will be thrown.
+   *
+   * @param user   who sends the message.
+   * @param text   text
+   * @param sentAt sent at
+   * @return message
+   */
   public Message sendMessage(User user, String text, LocalDateTime sentAt) {
-    if (!canSendMessage(user)){
+    if (!canSendMessage(user)) {
       throw new ApplicationException("User is not allowed to send message to this chat", 403);
     }
 
@@ -54,20 +70,46 @@ public abstract class Chat extends PanacheEntityBase {
     return message;
   }
 
+  /**
+   * @see Chat#canSendMessage(User)
+   */
   public boolean canSendMessage(UUID id) {
     return canSendMessage(new User(id, ""));
   }
 
+  /**
+   * Check if a user can send a message to this chat.
+   *
+   * @param user user to check
+   * @return true if user can send message, otherwise false
+   */
   public abstract boolean canSendMessage(User user);
 
+  /**
+   * Find messages from this chat.
+   *
+   * @return query
+   */
   public PanacheQuery<Message> findMessages() {
     return findMessages(id);
   }
 
+  /**
+   * Query for finding messages of a chat.
+   *
+   * @param chatId chat id
+   * @return message query
+   */
   public static PanacheQuery<Message> findMessages(UUID chatId) {
     return Message.find("chat", Sort.descending("sentAt"), chatId);
   }
 
+  /**
+   * Get a chat by its id or throw a {@link EntityNotFoundException} if the chat does not exists.
+   *
+   * @param id id
+   * @return chat
+   */
   public static Chat findByIdOrFail(Object id) {
     Chat chat = findById(id);
 
@@ -78,6 +120,12 @@ public abstract class Chat extends PanacheEntityBase {
     return chat;
   }
 
+  /**
+   * Query all chats of a given user.
+   *
+   * @param user user.
+   * @return chats of given user.
+   */
   public static List<Chat> findByUser(User user) {
     Stream<PrivateChat> privateChats = PrivateChat.findByParticipant(user.getId()).stream();
     Stream<GroupChat> groupChats = GroupChat.findByMember(user.getId()).stream();

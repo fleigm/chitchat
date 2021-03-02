@@ -10,6 +10,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+/**
+ * Allows authenticated users to request a token that is used to establish a web socket connection.
+ */
 @Path("sockets")
 @RolesAllowed("user")
 @Produces(MediaType.APPLICATION_JSON)

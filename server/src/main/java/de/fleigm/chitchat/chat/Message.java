@@ -14,7 +14,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Message extends PanacheEntity {
-
   private String text;
   private LocalDateTime sentAt;
   private UUID sender;

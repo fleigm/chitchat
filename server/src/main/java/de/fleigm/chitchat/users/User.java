@@ -16,13 +16,20 @@ public class User extends PanacheEntityBase {
   private UUID id;
   private String username;
 
-  protected User() {}
+  protected User() {
+  }
 
   public User(UUID id, String username) {
     this.id = id;
     this.username = username;
   }
 
+  /**
+   * Get a user by its id or throw a {@link EntityNotFoundException} if the user does not exists.
+   *
+   * @param id user id
+   * @return user
+   */
   public static User findByIdOrFail(Object id) {
     User user = User.findById(id);
 
