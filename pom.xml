@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>server</module>
+        <module>frontend</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -16,5 +17,12 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
+
+
+    <build>
+        <plugins>
+
+        </plugins>
+    </build>
 
 </project>
