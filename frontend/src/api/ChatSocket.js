@@ -1,6 +1,11 @@
 import {http} from '@/httpPlugin'
 import {Events, EventService} from "@/Events";
 
+export const Types = {
+    SEND_MESSAGE: 'send_message',
+    INCOMING_MESSAGE: 'message',
+}
+
 let socket = null;
 
 async function connect() {
@@ -12,7 +17,6 @@ async function connect() {
 
     socket.onopen = (e) => {
         console.log('opened connection');
-        console.log(e);
     };
     socket.onmessage = onMessage;
     socket.onerror = (e) => {
@@ -22,11 +26,24 @@ async function connect() {
 }
 
 function sendMessage(message) {
-    socket.send(JSON.stringify(message));
+    send(Types.SEND_MESSAGE, message);
+}
+
+function send(type, payload) {
+    const webSocketMessage = {
+        type,
+        payload,
+    };
+
+    socket.send(JSON.stringify(webSocketMessage));
 }
 
 function onMessage(event) {
-    EventService.emit(Events.NEW_MESSAGE, JSON.parse(event.data));
+    const webSocketMessage = JSON.parse(event.data);
+    
+    if (webSocketMessage.type === Types.INCOMING_MESSAGE) {
+        EventService.emit(Events.NEW_MESSAGE, webSocketMessage.payload);
+    }
 }
 
 export default {

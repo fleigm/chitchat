@@ -1,11 +1,13 @@
 <template>
-  <div class="flex gap-4 items-stretch h-full bg-gray-100">
+  <div class="flex gap-4 items-stretch h-full bg-gray-100 p-4">
     <div class="absolute w-full h-full bg-white z-50 flex flex-col items-center justify-center" v-if="loading">
         <ProgressSpinner></ProgressSpinner>
         <div class="text-xl font-thin text-secondary">Loading...</div>
     </div>
-    <Sidebar class="w-96"></Sidebar>
-    <div class="flex-1 p-4">
+    <div class="w-96 h-full">
+      <Sidebar class="h-full"></Sidebar>
+    </div>
+    <div class="flex-1">
       <ChatWindow class=""></ChatWindow>
     </div>
   </div>
@@ -21,21 +23,6 @@ import ChatSocket from "@/api/ChatSocket";
 export default {
   name: 'App',
   components: {ChatWindow, Sidebar},
-  /*setup() {
-
-    onMounted(() => {
-      Promise.all([
-        UserService.fetchUsers(),
-        UserService.fetchMe(),
-        ChatService.fetchChats(),
-      ]);
-    });
-
-    return {
-      users: UserService.users,
-      me: UserService.me,
-    }
-  },*/
 
   data() {
     return {
@@ -43,6 +30,10 @@ export default {
       me: UserService.me,
       loading: false,
     }
+  },
+
+  computed: {
+
   },
 
   mounted() {

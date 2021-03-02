@@ -21,8 +21,6 @@ export default {
     fromMe() {
       return this.message.sender === UserService.me.value.id;
     },
-
-
   }
 }
 </script>

@@ -14,6 +14,8 @@ import {EventPlugin} from "@/Events";
 import Textarea from "primevue/textarea";
 import Card from "primevue/card";
 import InputText from "primevue/inputtext";
+import Dialog from "primevue/dialog";
+import MultiSelect from "primevue/multiselect";
 
 
 const app = createApp(App)
@@ -28,6 +30,8 @@ app.component('ProgressSpinner', ProgressSpinner);
 app.component('Textarea', Textarea);
 app.component('InputText', InputText);
 app.component('Card', Card);
+app.component('Dialog', Dialog);
+app.component('MultiSelect', MultiSelect);
 
 $keycloak
     .init({
