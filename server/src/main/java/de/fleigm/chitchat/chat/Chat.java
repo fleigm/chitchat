@@ -48,7 +48,7 @@ public abstract class Chat extends PanacheEntityBase {
       throw new ApplicationException("User is not allowed to send message to this chat", 403);
     }
 
-    Message message = new Message(text, sentAt, user, this);
+    Message message = new Message(text, sentAt, user.getId(), this.id);
     this.lastMessage = message;
     message.persist();
     return message;
@@ -65,7 +65,7 @@ public abstract class Chat extends PanacheEntityBase {
   }
 
   public static PanacheQuery<Message> findMessages(UUID chatId) {
-    return Message.find("chat.id", Sort.descending("sentAt"), chatId);
+    return Message.find("chat", Sort.descending("sentAt"), chatId);
   }
 
   public static Chat findByIdOrFail(Object id) {

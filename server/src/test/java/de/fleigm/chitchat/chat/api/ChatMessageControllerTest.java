@@ -49,7 +49,7 @@ class ChatMessageControllerTest {
         .as(Message.class);
 
     assertEquals("hello world", message.getText());
-    assertEquals(user, message.getSender());
+    assertEquals(user.getId(), message.getSender());
     assertNotNull(message.getSentAt());
 
     assertTrue(Chat.<Chat>findById(chat.getId()).getLastMessage().isPresent());

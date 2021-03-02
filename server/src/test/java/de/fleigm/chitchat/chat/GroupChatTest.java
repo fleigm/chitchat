@@ -23,7 +23,6 @@ class GroupChatTest {
     transaction.run(() -> Factory.createGroupChats(user, 5));
     transaction.run(() -> Factory.createGroupChats(Factory.createUser(), 10));
 
-    assertEquals(15, GroupChat.count());
     assertEquals(5, GroupChat.findByMember(user.getId()).count());
   }
 

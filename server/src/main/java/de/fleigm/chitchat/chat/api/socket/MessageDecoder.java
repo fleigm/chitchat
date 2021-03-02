@@ -8,15 +8,15 @@ import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-public class MessageDecoder implements Decoder.Text<ChatMessage> {
+public class MessageDecoder implements Decoder.Text<WebSocketMessage> {
 
   ObjectMapper objectMapper = CDI.current().select(ObjectMapper.class).get();
 
   @Override
-  public ChatMessage decode(String s) throws DecodeException {
+  public WebSocketMessage decode(String s) throws DecodeException {
 
     try {
-      return objectMapper.readValue(s, ChatMessage.class);
+      return objectMapper.readValue(s, WebSocketMessage.class);
     } catch (JsonProcessingException e) {
       throw new DecodeException(s, "", e);
     }

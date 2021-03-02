@@ -4,15 +4,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatMessage {
-  private UUID sender;
+public class SendMessagePayload implements Payload {
+  public static final String TYPE = "send_message";
+
   private UUID chat;
   private String text;
-  private LocalDateTime sentAt;
+
+  @Override
+  public String getType() {
+    return TYPE;
+  }
+
+
 }

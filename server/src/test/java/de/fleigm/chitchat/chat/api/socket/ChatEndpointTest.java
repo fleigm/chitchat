@@ -48,7 +48,7 @@ class ChatEndpointTest {
 
     chatClient.sendMessage(chat.getId(), "hello world");
 
-    ChatMessage message = chatClient.messages.poll(10, TimeUnit.SECONDS);
+    Message message = chatClient.messages.poll(10, TimeUnit.SECONDS);
     assertEquals(user.getId(), message.getSender());
     assertEquals("hello world", message.getText());
     assertEquals(chat.getId(), message.getChat());
@@ -72,12 +72,11 @@ class ChatEndpointTest {
   }
 
 
-
   @ClientEndpoint(decoders = MessageDecoder.class, encoders = MessageEncoder.class)
   public static class ChatClient {
     public User user;
     public Session session;
-    public LinkedBlockingDeque<ChatMessage> messages = new LinkedBlockingDeque<>();
+    public LinkedBlockingDeque<Message> messages = new LinkedBlockingDeque<>();
 
     public ChatClient forUser(User user) {
       this.user = user;
@@ -98,13 +97,12 @@ class ChatEndpointTest {
     }
 
     @OnMessage
-    void message(ChatMessage message) {
-      messages.add(message);
+    void message(WebSocketMessage webSocketMessage) {
+      messages.add(((BroadcastMessagePayload) webSocketMessage.getPayload()).getMessage());
     }
 
     public ChatClient sendMessage(UUID chatId, String message) {
-      ChatMessage msg = new ChatMessage(null, chatId, message, null);
-      session.getAsyncRemote().sendObject(msg);
+      session.getAsyncRemote().sendObject(new WebSocketMessage(new SendMessagePayload(chatId, message)));
       return this;
     }
 

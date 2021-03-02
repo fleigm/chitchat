@@ -63,27 +63,33 @@ public class ChatEndpoint {
   }
 
   @OnMessage
-  public void onMessage(Session session, ChatMessage message) {
-    Message msg = chatService.sendMessage(getUserId(session), message.getChat(), message.getText());
+  public void onMessage(Session session, WebSocketMessage webSocketMessage) {
+    Payload payload = webSocketMessage.getPayload();
 
-    message.setSender(msg.getSender().getId());
-    message.setSentAt(msg.getSentAt());
+    if (payload instanceof SendMessagePayload) {
+      Message message = chatService.sendMessage(
+          getUserId(session),
+          payload.getChat(),
+          ((SendMessagePayload) payload).getText());
 
-    broadcast(message);
+      broadcast(new BroadcastMessagePayload(message));
+    }
+
   }
 
   private UUID getUserId(Session session) {
     return (UUID) session.getUserProperties().get("user");
   }
 
-  private void broadcast(ChatMessage message) {
-    Chat chat = chatService.getChat(message.getChat());
+  private void broadcast(Payload payload) {
+    Chat chat = chatService.getChat(payload.getChat());
+    WebSocketMessage webSocketMessage = new WebSocketMessage(payload);
 
     sessions.values()
         .stream()
         .filter(session -> chat.canSendMessage(getUserId(session)))
         .peek(session -> LOGGER.info("send to {}" + getUserId(session)))
-        .forEach(session -> session.getAsyncRemote().sendObject(message, result ->  {
+        .forEach(session -> session.getAsyncRemote().sendObject(webSocketMessage, result ->  {
           if (result.getException() != null) {
             LOGGER.error("Could not send message", result.getException());
           }

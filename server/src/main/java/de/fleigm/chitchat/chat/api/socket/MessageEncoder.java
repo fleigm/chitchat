@@ -9,13 +9,13 @@ import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
-public class MessageEncoder implements Encoder.Text<ChatMessage> {
+public class MessageEncoder implements Encoder.Text<WebSocketMessage> {
 
   @Inject
   ObjectMapper objectMapper = CDI.current().select(ObjectMapper.class).get();
 
   @Override
-  public String encode(ChatMessage object) throws EncodeException {
+  public String encode(WebSocketMessage object) throws EncodeException {
     try {
       return objectMapper.writeValueAsString(object);
     } catch (JsonProcessingException e) {
